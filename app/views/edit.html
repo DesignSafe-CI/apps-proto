@@ -1,0 +1,15 @@
+<div modal="fileManager">
+    <div class="modal-header">
+      <h3 class="modal-title">{{currentApp.name}}</h3>
+    </div>
+    <div class="modal-body">
+      <dl ng-repeat="(key, value) in currentApp.value">
+        <dt>{{key}}</dt>
+        <dd>{{value | json}}</dd>
+      </dl>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+      <button class="btn btn-success" ng-click="run()">Run</button>
+    </div>
+</div>

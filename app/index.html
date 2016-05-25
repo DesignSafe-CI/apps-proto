@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body ng-app="appsProtoApp">
+
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">appsProto</h3>
+      </div>
+
+      <div ng-view=""></div>
+
+      <div class="footer">
+      </div>
+    </div>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
+
+    <!-- agave-angular-sdk -->
+    <!-- Helper files -->
+    <script src="bower_components/agave-angularjs-sdk/Agave/Configuration.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/APIHelper.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Http/Client/HttpContext.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Http/Client/RequestClient.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Http/Request/HttpRequest.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Http/Response/HttpResponse.js" type="text/javascript"></script>
+
+    <!-- Models -->
+    <script src="bower_components/agave-angularjs-sdk/Agave/Models/Application.js"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Models/ApplicationAction.js"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Models/ApplicationActionTypeEnum.js"></script>
+
+    <script src="bower_components/agave-angularjs-sdk/Agave/Models/Metadata.js"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Models/MetadataSchema.js"></script>
+
+    <!-- API Controllers -->
+    <script src="bower_components/agave-angularjs-sdk/Agave/Controllers/AppsController.js" type="text/javascript"></script>
+    <script src="bower_components/agave-angularjs-sdk/Agave/Controllers/MetaController.js" type="text/javascript"></script>
+
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/providers/config.js"></script>
+    <script src="scripts/services/simpleList.js"></script>
+    <script src="scripts/services/multipleList.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/about.js"></script>
+
+</body>
+</html>

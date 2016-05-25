@@ -1,0 +1,295 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+$fa-font-path: "../bower_components/font-awesome/fonts";
+
+// bower:scss
+@import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
+@import "font-awesome/scss/font-awesome.scss";
+// endbower
+
+
+// /**
+//  * For the correct positioning of the placeholder element, the dnd-list and
+//  * it's children must have position: relative
+//  */
+//
+//
+// .applist ul[dnd-list],
+// .applist ul[dnd-list] > li {
+//   position: relative;
+// }
+//
+// /**
+//  * The dnd-list should always have a min-height,
+//  * otherwise you can't drop into it once it's empty
+//  */
+// .applist ul[dnd-list] {
+//     min-height: 42px;
+//     padding-left: 0px;
+// }
+//
+// /**
+//  * An element with .dndPlaceholder class will be
+//  * added to the dnd-list while the user is dragging
+//  * over it.
+//  */
+// .applist ul[dnd-list] .dndPlaceholder {
+//     display: block;
+//     background-color: #ddd;
+//     min-height: 42px;
+// }
+//
+// /**
+//  * The dnd-lists's child elements currently MUST have
+//  * position: relative. Otherwise we can not determine
+//  * whether the mouse pointer is in the upper or lower
+//  * half of the element we are dragging over. In other
+//  * browsers we can use event.offsetY for this.
+//  */
+// .applist ul[dnd-list] li {
+//     background-color: #fff;
+//     border: 1px solid #ddd;
+//     border-top-right-radius: 4px;
+//     border-top-left-radius: 4px;
+//     display: block;
+//     padding: 10px 15px;
+//     margin-bottom: -1px;
+// }
+//
+// /**
+//  * Show selected elements in green
+//  */
+// .applist ul[dnd-list] li.selected {
+//     background-color: #dff0d8;
+//     color: #3c763d;
+// }
+//
+// .workspace-panel {
+//     position: relative;
+//     border: 1px solid #ddd;
+//     background-color: #eee;
+//     padding: 9px;
+//     margin-bottom: 30px;
+// }
+
+
+/* workspace */
+.workspace-panel-container {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    align-content: flex-start;
+    -webkit-flex: 0;
+    -moz-flex: 0;
+    -ms-flex: 0;
+    flex: 0;
+}
+
+.workspace-panel {
+    position: relative;
+    border: 1px solid #ddd;
+    background-color: #eee;
+    padding: 9px;
+    margin-bottom: 30px;
+}
+
+.workspace-panel-main {
+    -webkit-flex: 1;
+    -moz-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    min-height: 600px;
+}
+
+.workspace-panel-sidebar {
+    -webkit-flex: 0 0 auto;
+    -moz-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    max-width: 310px;
+}
+
+.workspace-panel-toggle {
+    width: 1.5em;
+    position: absolute;
+    top: 0;
+}
+
+.workspace-panel-sidebar-left .workspace-panel-toggle {
+    right: 0;
+}
+
+.workspace-panel-sidebar-right .workspace-panel-toggle {
+    left: 0;
+}
+
+.workspace-panel-collapsed {
+    background-color: #999;
+    border-color: #777;
+    color: white;
+}
+
+.workspace-panel-collapsed .workspace-panel-toggle {
+    width: 100%;
+}
+
+.workspace-panel-collapsed .workspace-panel-content {
+    display: none;
+}
+
+.workspace-panel-title {
+    display: none;
+    position: absolute;
+    top: 2em;
+    transform: rotate(90deg);
+    transform-origin: 0;
+    white-space: nowrap;
+}
+
+.workspace-panel-collapsed .workspace-panel-title {
+    display: block;
+}
+
+.apps-tray {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    align-items: center;
+}
+
+.app-wrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex: 0 0 auto;
+    -moz-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 1px 1px 2px rgba(192,192,192,0.1);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+ul{
+    padding-right: 0px;
+}
+
+.app {
+  padding: 5px;
+}
+
+.app-version {
+  font-size: 0.7em;
+}
+
+.app-active {
+  background-color: #337AB7;
+  color: #fff;
+}
+
+.app-form-wrapper {
+  border: 1px solid #eee;
+  padding: 0.5em;
+  background-color: #fff;
+}
+
+
+/* corner ribon */
+.corner-ribbon-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.corner-ribbon {
+  width: 200px;
+  background: #e43;
+  position: absolute;
+  top: 25px;
+  left: -50px;
+  text-align: center;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  line-height: 2.5;
+  letter-spacing: 1px;
+  color: #f0f0f0;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.corner-ribbon-fa {
+    line-height: 1.5;
+    font-size: 0.9em;
+    width: 60px;
+    top: 0px;
+    left: -20px;
+}
+
+.corner-ribbon.shadow{
+  box-shadow: 0 0 3px rgba(0,0,0,.3);
+}
+
+.corner-ribbon.top-left{
+  top: 25px;
+  left: -50px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.corner-ribbon.top-right{
+  top: 25px;
+  right: -50px;
+  left: auto;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.corner-ribbon.bottom-left{
+  top: auto;
+  bottom: 25px;
+  left: -50px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.corner-ribbon.bottom-right{
+  top: auto;
+  right: -50px;
+  bottom: 25px;
+  left: auto;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.corner-ribbon.white{background: #f0f0f0; color: #555;}
+.corner-ribbon.black{background: #333;}
+.corner-ribbon.grey{background: #999;}
+.corner-ribbon.blue{background: #39d;}
+.corner-ribbon.green{background: #2c7;}
+.corner-ribbon.turquoise{background: #1b9;}
+.corner-ribbon.purple{background: #95b;}
+.corner-ribbon.red{background: #e43;}
+.corner-ribbon.orange{background: #e82;}
+.corner-ribbon.yellow{background: #ec0;}

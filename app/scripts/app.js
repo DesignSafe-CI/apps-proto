@@ -1,23 +1,12 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name appsProtoApp
- * @description
- * # appsProtoApp
- *
- * Main module of the application.
- */
-angular
+var app = angular
   .module('appsProtoApp', [
     'ngAnimate',
-    // 'ngCookies',
-    // 'ngResource',
     'ngRoute',
-    // 'ngSanitize',
-    // 'ngTouch',
     'dndLists',
     'ui.bootstrap',
+    'xeditable',
     'AgavePlatformScienceAPILib'
   ])
   .config(function ($routeProvider) {
@@ -33,4 +22,8 @@ angular
       .otherwise({
         redirectTo: '/'
       });
+  });
+
+  app.run(function(editableOptions) {
+    editableOptions.theme = 'bs3';
   });

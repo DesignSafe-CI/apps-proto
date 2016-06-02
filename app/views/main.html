@@ -6,9 +6,6 @@
         <div class="app-version">&nbsp;</div>
     </div>
   </div>
-  <div>
-
-  </div>
   <uib-tabset ng-show="!requesting" active="activeTabIndex">
     <uib-tab ng-repeat="tab in tabs">
       <uib-tab-heading>
@@ -16,69 +13,36 @@
       </uib-tab-heading>
       <div ng-show="!tab.edit">
         <div ng-repeat="(listName, list) in tab.content.lists" >
-          <div class="apps-tray">
-              <div ng-repeat="item in list"
-                  class="app-wrapper"
-                  ng-click="getAppMetadata(item)",
-                  >
-                  <div class="corner-ribbon-container">
-                      <div class="app text-center">
-                          <div class="app-icon"><i class="fa fa-cube fa-3x"></i></div>
-                          <div class="app-title">{{item.label}}</div>
-                          <!-- <div class="app-version">0.2</div> -->
-                      </div>
+          <div class="row top-buffer">
+            <div ng-repeat="item in list" ng-click="getAppMetadata(item)">
+              <div ng-class="'col-md-4 text-center'">
+                <div class="thumbnail">
+                  <div class="text-center">
+                    <i class="fa fa-cube fa-3x"></i>
                   </div>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div ng-show="tab.edit">
-        <div class="row">
-          <div ng-repeat="list in tab.multiple.lists" class="col-md-6">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                  <h3 class="panel-title">List {{list.listName}}</h3>
-              </div>
-              <div class="panel-body">
-                <a href="" data-toggle="modal" data-target="#edit">{{'Modal'}}</a>
-                <div dnd-list dnd-drop="onDrop(list, item, index)" class="list-inline">
-                    <div ng-repeat="item in list.items"
-                        dnd-draggable="getSelectedItemsIncluding(list, item)"
-                        dnd-dragstart="onDragstart(list, event)"
-                        dnd-moved="onMoved(list)"
-                        dnd-dragend="list.dragging = false"
-                        dnd-selected="item.selected = !item.selected"
-                        ng-class="{'selected': item.selected}"
-                        ng-hide="list.dragging && item.selected"
-                        class="app-wrapper"
-                        >
-                        <div class="corner-ribbon-container">
-                            <div class="app text-center">
-                                <div class="app-icon"><i class="fa fa-cube fa-3x"></i></div>
-                                <div class="app-title">{{item.label}}</div>
-                            </div>
-                        </div>
-                    </div>
+                  <div class="text-center">
+                    <h3>{{item.label}}</h3>
+                  </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="button-group pull-right">
-              <button class="btn btn-default" ng-click="cancelEdit(tab)">Cancel</button>
-              <button class="btn btn-primary" ng-click="saveList(tab)">Save</button>
-            </div>
-          </div>
-        </div>
-
-
       </div>
-
-      <button class="btn btn-success" ng-show="!tab.edit" ng-click="tab.edit = !tab.edit" >Edit</button>
+      <div ng-show="tab.edit" class="dnd-list">
+        <div ng-include="config.tplPath + '/edit.html'"></div>
+      </div>
+      <div class="text-center top-buffer">
+        <button ng-show="tab.title !== 'public' && tab.title !== 'private' && !tab.edit" class="btn btn-success" ng-click="editTab(tab); tab.edit = !tab.edit">Edit</button>
+      </div>
     </uib-tab>
     <button class="btn btn-default" ng-click="addTab()" ><i class="fa fa-plus"></i></button>
   </uib-tabset>
+</div>
+
+<div ng-show="workspaceInput">
+  <pre>
+      <h4 class="text-center">Running Job</h4>
+      {{workspaceInput | json}}
+  </pre>
 </div>

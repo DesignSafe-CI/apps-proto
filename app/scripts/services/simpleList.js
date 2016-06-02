@@ -1,7 +1,7 @@
 (function(angular) {
     "use strict";
     angular.module('appsProtoApp').factory('SimpleList', [
-        '$http', '$q', 'MetaController', function ($http, $q, MetaController) {
+        '$http', '$q', 'MetaController', 'AppsController', function ($http, $q, MetaController, AppsController) {
 
         var SimpleList = function() {
             this.selected = null,
@@ -14,7 +14,6 @@
               angular.forEach(apps, function(app){
                 self.lists[name].push({label: app});
               });
-
             return self;
         };
 

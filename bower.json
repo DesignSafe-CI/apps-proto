@@ -16,6 +16,7 @@
     "angular-touch": "1.5.3",
     "agave-angularjs-sdk": "git+https://bitbucket.org/agaveapi/angularjs-sdk.git#master",
     "angular-drag-and-drop-lists": "1.4.0",
+    "angular-xeditable": "0.1.12",
     "font-awesome": "4.6.3",
     "ngstorage": "0.3.10"
   },

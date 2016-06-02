@@ -1,55 +1,115 @@
 'use strict';
 
-angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '$timeout', '$q', '$uibModal', 'config', 'AppsController', 'MetaController', 'SimpleList', 'MultipleList', function ($scope, $rootScope, $timeout, $q, $uibModal, config, AppsController, MetaController, SimpleList, MultipleList) {
+angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '$timeout', '$q', '$uibModal', 'config', 'AppsController', 'MetaController', 'ProfilesController', 'SimpleList', 'MultipleList', function ($scope, $rootScope, $timeout, $q, $uibModal, config, AppsController, MetaController, ProfilesController, SimpleList, MultipleList) {
 
-  /*********************** tabs *********************/
+  /***************************** tabs *****************************/
    $scope.config = config;
    $scope.activeTabIndex = 0
    $scope.tabs = [];
 
-   $scope.addTab = function(){
-     var self = this;
-     var deferred = $q.defer();
-     var appList = new SimpleList();
-     var query = '{"value.type": "application"}';
-     var title = 'newlist';
+  $scope.editTab = function(tab){
+    if (typeof tab.multiple === 'undefined'){
+      var self = this;
+      var deferred = $q.defer();
+      var appList = new SimpleList();
+      var promises = [];
 
-    // Get MultipleList
-     var appMultipleList = new MultipleList();
-     var query = '{"value.type": "application"}';
+     // Get MultipleList
+      var appMultipleList = new MultipleList();
+      var query = '{"value.type": "apps"}';
 
-     MetaController.listMetadata(query, 99999, 0)
-       .then(function(metaList){
-         var apps = [];
-         angular.forEach(metaList, function(meta){
-            apps.push(meta.name);
-         });
-         appMultipleList.addList('newlist', apps);
+      MetaController.listMetadata(query, 99999, 0)
+        .then(function(metaList){
+          var apps = [];
+          var myapps = [];
 
-         $scope.tabs.push({
-           title: title,
-           content: {},
-           edit: true,
-           multiple: appMultipleList
-         })
-         $timeout(function(){
-           $scope.activeTabIndex = ($scope.tabs.length - 1);
-         });
-         deferred.resolve(self);
-       })
-       .catch(function(error){
-         deferred.reject(error);
-       });
+          angular.forEach(metaList, function(app){
+            apps.push(app.name);
+          });
 
-       return deferred.promise;
-   }
+          promises.push(appMultipleList.addList('apps', apps));
+
+          angular.forEach(tab.content.lists[tab.title], function(myapp){
+            myapps.push(myapp.label);
+          });
+
+          promises.push(appMultipleList.addList(tab.title, myapps));
+
+          $q.all(promises).then(
+            function(data) {
+              tab.content = {};
+              tab.multiple = appMultipleList;
+              tab.original = appMultipleList.lists[1];
+              tab.edit = true;
+            },
+            function(error){
+            });
+          deferred.resolve(self);
+        })
+        .catch(function(error){
+          deferred.reject(error);
+        });
+
+        return deferred.promise;
+    }
+
+  };
+
+  $scope.addTab = function(){
+    var self = this;
+    var deferred = $q.defer();
+    var appList = new SimpleList();
+    var title = 'clickme';
+    var promises = [];
+    var appMultipleList = new MultipleList();
+    var query = '{"value.type": "apps"}';
+
+    MetaController.listMetadata(query, 99999, 0)
+      .then(function(metaList){
+        var apps = [];
+        var myapps = [];
+
+        angular.forEach(metaList, function(app){
+          apps.push(app.name);
+        });
+
+        // Add all apps list and empty list
+        promises.push(appMultipleList.addList('apps', apps));
+        promises.push(appMultipleList.addList(title));
+
+        $q.all(promises).then(
+          function(data) {
+            $scope.tabs.push({
+              title: title,
+              content: {},
+              edit: true,
+              multiple: appMultipleList,
+              original: appMultipleList.lists[1]
+            })
+            $timeout(function(){
+              $scope.activeTabIndex = ($scope.tabs.length - 1);
+            });
+          },
+          function(error){
+          });
+
+
+        deferred.resolve(self);
+      })
+      .catch(function(error){
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+  }
+
 
    $scope.addDefaultTab = function (query, title) {
       var self = this;
       var deferred = $q.defer();
-      var appList = new SimpleList();
+      var simpleList = new SimpleList();
 
-      appList.getListByQuery(query, title)
+      simpleList.getListByQuery(query, title)
         .then(function(appList){
           $scope.tabs.push({
             title: title,
@@ -67,76 +127,148 @@ angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '
 
    };
 
-   $scope.addUserTabs = function (query) {
-      var self = this;
-      var deferred = $q.defer();
+     $scope.addUserTabs = function (query) {
+        var self = this;
+        var deferred = $q.defer();
 
+        query = '{"value.type": "apps-list", "value.username": "mrojas"}';
 
-      MetaController.listMetadata(query, 99999, 0)
-        .then(function(metaList){
-            // get list of apps in each list metadata
-            angular.forEach(metaList, function(list){
-              var appList = new SimpleList();
-              $scope.tabs.push({
-                title: list.value.listName,
-                content: appList.addList(list.value.listName, list.value.listApps)
-              })
-              $timeout(function(){
-                $scope.activeTabIndex = ($scope.tabs.length - 1);
+        MetaController.listMetadata(query, 99999, 0)
+          .then(function(metaList){
+              // get list of apps in each list metadata
+              angular.forEach(metaList, function(list){
+                var appList = new SimpleList();
+                $scope.tabs.push({
+                  title: list.value.name,
+                  content: appList.addList(list.value.name, list.value.apps)
+                })
+                $timeout(function(){
+                  $scope.activeTabIndex = ($scope.tabs.length - 1);
+                });
               });
-            });
-            deferred.resolve(self);
+              deferred.resolve(self);
+          })
+          .catch(function(error){
+            deferred.reject(error);
+          });
+        return deferred.promise;
+
+     };
+
+     $scope.removeTab = function (event, index) {
+       event.preventDefault();
+       event.stopPropagation();
+       $scope.tabs.splice(index, 1);
+     };
+
+    $scope.staticList = ['public', 'private'];
+
+    $scope.initTabs = function(){
+      var self = this;
+      var promises = [];
+      self.requesting = true;
+
+      ProfilesController.getProfile()
+        .then(function(data){
+          $scope.username = data.username;
+
+          promises.push($scope.addDefaultTab('{"value.type": "apps-root", "value.isPublic": false}', 'private'));
+          promises.push($scope.addDefaultTab('{"value.type": "apps-root", "value.isPublic": true}', 'public'));
+          promises.push($scope.addUserTabs('{"value.type": "apps-list", "value.username": "'+$scope.username+'"}'));
+
+            $q.all(promises).then(
+              function(data) {
+                $timeout(function(){
+                  self.activeTabIndex = 0;
+                  self.requesting = false;
+                });
+              },
+              function(error){
+              });
         })
-        .catch(function(error){
-          deferred.reject(error);
+        .catch(function(data){
         });
-      return deferred.promise;
+    };
 
-   };
+    $scope.saveTab = function(tab, list){
+      var query = '{"value.name":"'+tab.title+'","value.type": "apps-list"}';
+      MetaController.listMetadata(query, 99999, 0)
+        .then(function(data){
+          var metadata = {};
+          if (data.length === 0){
+            metadata.name = list.listName;
+            metadata.value = {};
+            metadata.value.name = list.listName;
+            metadata.value.username = $scope.username;
+            metadata.value.type = 'apps-list';
+            metadata.value.apps = [];
+            angular.forEach(list.items, function(item){
+              metadata.value.apps.push(item.label);
+            });
 
-   $scope.removeTab = function (event, index) {
-     event.preventDefault();
-     event.stopPropagation();
-     $scope.tabs.splice(index, 1);
-   };
+            MetaController.addMetadata(metadata)
+              .then(function(data){
+                var simpleList = tab;
+                simpleList.content.selected = null;
+                simpleList.content.lists = {};
+                simpleList.content.lists[list.listName] = [];
+                angular.forEach(tab.multiple.lists[1].items, function(item){
+                  simpleList.content.lists[list.listName].push({label: item.label})
+                });
+                simpleList.title = list.listName;
+                simpleList.edit = false;
+              })
+              .catch(function(data){
+              });
+            //   var body = {};
+          } else {
+            // update metadata record
+            metadata.name = list.listName;
+            metadata.value = {};
+            metadata.value.name = list.listName;
+            metadata.value.username = $scope.username;
+            metadata.value.type = 'apps-list';
+            metadata.value.apps = [];
+            angular.forEach(list.items, function(item){
+              metadata.value.apps.push(item.label);
+            });
 
-  $scope.staticList = ['public', 'private'];
+            MetaController.updateMetadata(metadata, data[0].uuid)
+              .then(function(data){
+                var simpleList = tab;
+                simpleList.content.selected = null;
+                simpleList.content.lists = {};
+                simpleList.content.lists[list.listName] = [];
+                angular.forEach(tab.multiple.lists[1].items, function(item){
+                  simpleList.content.lists[list.listName].push({label: item.label})
+                });
+                simpleList.title = list.listName;
+                simpleList.edit = false;
+              })
+              .catch(function(data){
+              })
 
-  $scope.initTabs = function(){
-    var self = this;
-    var promises = [];
-    self.requesting = true;
-
-    promises.push($scope.addDefaultTab('{"value.definition.isPublic": false}', 'private'));
-    promises.push($scope.addDefaultTab('{"value.definition.isPublic": true}', 'public'));
-    promises.push($scope.addUserTabs('{"value.listUsername": "mrojas"}'));
-
-    $q.all(promises).then(
-      function(data) {
-        $timeout(function(){
-          self.activeTabIndex = 0;
-          self.requesting = false;
+          }
+        })
+        .catch(function(data){
         });
-      },
-      function(error){
+    };
+
+    $scope.cancelTab = function(tab, list){
+      var simpleList = tab;
+      simpleList.content.selected = null;
+      simpleList.content.lists = {};
+      simpleList.content.lists[tab.title] = [];
+      angular.forEach(tab.original.items, function(item){
+        simpleList.content.lists[tab.title].push({label: item.label})
       });
-  };
+      simpleList.edit = false;
+    }
 
    $scope.initTabs();
 
 
     /***************************** draggable list *****************************/
-    $scope.editList = function(){
-      $scope.edit = true;
-    }
-
-    $scope.cancelEdit = function(list){
-      list.edit = false;
-    }
-
-    $scope.saveList = function(list){
-    }
-
 
     $scope.getSelectedItemsIncluding = function(list, item) {
       item.selected = true;
@@ -146,11 +278,6 @@ angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '
 
     $scope.onDragstart = function(list, event) {
        list.dragging = true;
-       if (event.dataTransfer.setDragImage) {
-         var img = new Image();
-         img.src = 'framework/vendor/ic_content_copy_black_24dp_2x.png';
-         event.dataTransfer.setDragImage(img, 0, 0);
-       }
     };
 
     $scope.onDrop = function(list, items, index) {
@@ -165,15 +292,23 @@ angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '
       list.items = list.items.filter(function(item) { return !item.selected; });
     };
 
-    /******************* edit list/show metadata ***********************/
+    /*********************** metadata modal ***********************/
     $scope.getAppMetadata = function(app){
-      var query = '{"name":"'+ app.label +'"}';
-      MetaController.listMetadata(query, 1, 0)
+      var query = '';
+
+      if (app.label.indexOf('-') !== -1){
+        query = 'id.eq='+app.label;
+      } else {
+        query = 'id.like='+app.label+'-*';
+      }
+
+      AppsController.searchApps(99999, 0, query)
         .then(function(data){
-          $scope.currentApp = data[0];
+          $scope.apps = data;
           var modalInstance = $uibModal.open({
-              templateUrl: 'views/edit.html',
+              templateUrl: 'views/modal.html',
               scope: $scope,
+              size: 'lg',
               resolve: {
                 currentApp: function(){
                   return $scope.currentApp;
@@ -184,30 +319,29 @@ angular.module('appsProtoApp').controller('MainCtrl', ['$scope', '$rootScope', '
               },
               controller: [
                   '$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
-                      $scope.run = function() {
-                          $uibModalInstance.close();
+                      $scope.showDetails = false;
+
+                      $scope.run = function(appId) {
+                        var query = '{"value.name":"'+appId+'","value.type": "apps"}';
+
+                        MetaController.listMetadata(query, 99999, 0)
+                          .then(function(data){
+                            $rootScope.workspaceInput = data[0];
+                            $uibModalInstance.dismiss();
+                          })
+                          .catch(function(data){
+                          });
                       };
+
                       $scope.cancel = function() {
                           app.edit = false;
                           $uibModalInstance.dismiss();
                       };
                   }
               ]
-          });
+            });
         })
-        .catch(function(error){
+        .catch(function(data){
         });
-    }
-
-    $scope.saveList = function(list){
-      var simpleList = list;
-      simpleList.content.selected = null;
-      simpleList.content.lists = {};
-      simpleList.content.lists['newlist'] = [];
-      angular.forEach(list.multiple.lists[1].items, function(list){
-        simpleList.content.lists['newlist'].push({label: list.label})
-      });
-      simpleList.edit = false;
-
     }
   }]);

@@ -1,7 +1,7 @@
 (function(angular) {
     "use strict";
     angular.module('appsProtoApp').service('MultipleList', [
-        '$http', function ($http) {
+        '$http', '$q', function ($http, $q) {
 
 
         var MultipleList = function() {
@@ -10,8 +10,9 @@
 
         MultipleList.prototype.addList = function(name, apps) {
             var self = this;
+            var deferred = $q.defer();
             var list = {};
-            list.listName = 'apps';
+            list.listName = name;
             list.dragging = false;
             list.items = [];
             angular.forEach(apps, function(app){
@@ -21,10 +22,7 @@
             // push apps list
             this.lists.push(list);
 
-            // add empty list
-            this.lists.push({listName: name, dragging: false, items: list.items});
-
-            return self;
+            return deferred.resolve(self);
         };
 
         return MultipleList;

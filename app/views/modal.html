@@ -1,0 +1,39 @@
+<div modal="fileManager">
+    <div class="modal-header">
+      <h3 class="modal-title">{{currentApp.name}}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="dnd-list row">
+        <div ng-repeat="app in apps">
+            <div ng-class="(showDetails || apps.length < 2)  ?  'col-md-12': 'col-md-4 text-center'">
+              <div class="thumbnail">
+                <div class="text-center">
+                  <i class="fa fa-cube fa-3x"></i>
+                </div>
+                <div class="text-center">
+                  <h3>{{app.id}}</h3>
+                  <h6>{{app.version}}</h6>
+                </div>
+                <dl ng-show="showDetails" class="dl-horizontal">
+                  <dt ng-if="app.shortDescription">Description</dt>
+                  <dd ng-if="app.shortDescription">{{app.shortDescription}}</dd>
+                  <dt ng-if="app.isPublic">Public</dt>
+                  <dd ng-if="app.isPublic">{{app.isPublic}}</dd>
+                  <dt ng-if="app.lastModified">Last Modified</dt>
+                  <dd ng-if="app.lastModified">{{app.lastModified}}</dd>
+                </dl>
+                <div class="text-center">
+                  <button class="btn btn-success" role="button" ng-click="run(app.id)">Run</button>
+                  <button class="btn btn-default" role="button" ng-click="showDetails = !showDetails">{{showDetails ? 'Hide Details': 'Details'}}</button>
+                </div>
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
